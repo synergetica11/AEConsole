@@ -162,10 +162,9 @@ class View: UIView {
     }
     
     func updateUI() {
-        tableView.reloadData()
-        
         updateLinesCountLabels()
         updateContentLayout()
+        tableView.reloadData()
         
         if autoFollowButton.isSelected {
             scrollToBottom()
@@ -262,7 +261,8 @@ extension View {
     }
     
     private func configureTableView() {
-        tableView.rowHeight = config.rowHeight
+        tableView.estimatedRowHeight = 44
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.allowsSelection = false
         tableView.separatorStyle = .none
         
@@ -468,29 +468,29 @@ extension View {
     
     // MARK: - Actions
     
-    @objc func didTapToggleToolbarButton(_ sender: UIButton) {
+    func didTapToggleToolbarButton(_ sender: UIButton) {
         toggleToolbar()
     }
     
-    @objc func didTapForwardTouchesButton(_ sender: UIButton) {
+    func didTapForwardTouchesButton(_ sender: UIButton) {
         forwardTouchesButton.isSelected = !forwardTouchesButton.isSelected
         aelog("Forward Touches [\(forwardTouchesButton.isSelected)]")
     }
     
-    @objc func didTapAutoFollowButton(_ sender: UIButton) {
+    func didTapAutoFollowButton(_ sender: UIButton) {
         autoFollowButton.isSelected = !autoFollowButton.isSelected
         aelog("Auto Follow [\(autoFollowButton.isSelected)]")
     }
     
-    @objc func didTapClearLogButton(_ sender: UIButton) {
+    func didTapClearLogButton(_ sender: UIButton) {
         brain.clearLog()
     }
     
-    @objc func didTapExportButton(_ sender: UIButton) {
+    func didTapExportButton(_ sender: UIButton) {
         brain.exportAllLogLines()
     }
     
-    @objc func didTapFilterClearButton(_ sender: UIButton) {
+    func didTapFilterClearButton(_ sender: UIButton) {
         textField.resignFirstResponder()
         if !brain.isEmpty(textField.text) {
             brain.filterText = nil
@@ -498,7 +498,7 @@ extension View {
         textField.text = nil
     }
     
-    @objc func didRecognizeUpdateOpacityGesture(_ sender: UIPanGestureRecognizer) {
+    func didRecognizeUpdateOpacityGesture(_ sender: UIPanGestureRecognizer) {
         if sender.state == .ended {
             if isToolbarActive {
                 let xTranslation = sender.translation(in: menuView).x
@@ -511,7 +511,7 @@ extension View {
         }
     }
     
-    @objc func didRecognizeHideConsoleGesture(_ sender: UITapGestureRecognizer) {
+    func didRecognizeHideConsoleGesture(_ sender: UITapGestureRecognizer) {
         toggleUI()
     }
     

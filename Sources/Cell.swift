@@ -34,6 +34,13 @@ class Cell: UITableViewCell {
     
     private let config = Config.shared
     
+    private let label = UILabel()
+    
+    func setTextStr(_ text: String) {
+        label.text = text
+        label.setNeedsUpdateConstraints()        
+    }
+    
     // MARK: - Init
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -52,12 +59,20 @@ class Cell: UITableViewCell {
     }
     
     private func configureLabel() {
-        guard let label = textLabel else { return }
-        
+        embedLabel()
         label.font = config.consoleFont
         label.textColor = config.textColorWithOpacity
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.textAlignment = .left
+    }
+    
+    private func embedLabel() {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(label)
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["label": label as Any]))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[label]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["label": label as Any]))
+        contentView.setNeedsUpdateConstraints()
+        contentView.layoutIfNeeded()
     }
     
     // MARK: - Override
@@ -65,13 +80,7 @@ class Cell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        textLabel?.textColor = config.textColorWithOpacity
+        label.textColor = config.textColorWithOpacity
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
         
-        textLabel?.frame = bounds
-    }
-    
 }
